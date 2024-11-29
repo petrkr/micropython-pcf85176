@@ -30,10 +30,12 @@ class SixDigitSigBattProgress(Display):
         "7" : 0xE0,
         "8" : 0xEF,
         "9" : 0xED,
+        "c" : 0x8B,
         "e" : 0x8F,
         "f" : 0x8E,
         "d" : 0x77,
-        "h" : 0x76
+        "h" : 0x76,
+        "*" : 0xCC
         }
 
     def __init__(self, bus, address=56, subaddress=0):

@@ -51,12 +51,6 @@ class SixDigitSigBattProgress(Display):
         return self.CHARSET[char]
 
 
-    def progress(self, value):
-        data = bytearray(3)
-        data[0] = value
-        self.write(data, self.ADDR_PROGRESS)
-
-
     def batt(self, level):
         if value > 4:
             raise ValueError("Out of range")
@@ -72,6 +66,50 @@ class SixDigitSigBattProgress(Display):
             self._buffer_battsig[0] |= 1
 
         self.write(self._buffer_battsig, self.ADDR_SIGNAL_BATT)
+
+
+    def progress(self, value):
+        if value > 150:
+            raise ValueError("Out of range")
+
+        buffer = bytearray(4)
+
+        if value > 0:
+            buffer[0] |= 0x80
+        if value >= 10:
+            buffer[0] |= 0x40
+        if value >= 20:
+            buffer[0] |= 0x20
+        if value >= 30:
+            buffer[0] |= 0x10
+        if value >= 40:
+            buffer[0] |= 0x08
+        if value >= 50:
+            buffer[0] |= 0x04
+        if value >= 60:
+            buffer[0] |= 0x02
+        if value >= 70:
+            buffer[0] |= 0x01
+
+        if value >= 80:
+            buffer[1] |= 0x80
+        if value >= 90:
+            buffer[1] |= 0x40
+        if value >= 100:
+            buffer[1] |= 0x20
+        if value >= 110:
+            buffer[1] |= 0x10
+        if value >= 120:
+            buffer[1] |= 0x08
+        if value >= 130:
+            buffer[1] |= 0x04
+        if value >= 140:
+            buffer[1] |= 0x02
+        if value == 150:
+            buffer[1] |= 0x01
+
+
+        self.write(buffer, self.ADDR_PROGRESS)
 
 
     def signal(self, level):

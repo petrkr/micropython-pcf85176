@@ -59,14 +59,30 @@ class SixDigitSigBattProgress(Display):
 
     def batt(self, level):
         self._buffer_battsig[0] &= ~(0x0f)
-        self._buffer_battsig[0] |= 15 << (4 - level)
+        if level > 0:
+            self._buffer_battsig[0] |= 8
+        if level > 1:
+            self._buffer_battsig[0] |= 4
+        if level > 2:
+            self._buffer_battsig[0] |= 2
+        if level > 3:
+            self._buffer_battsig[0] |= 1
 
         self.write(self._buffer_battsig, self.ADDR_SIGNAL_BATT)
 
 
     def signal(self, level):
         self._buffer_battsig[0] &= ~(0xf0)
-        self._buffer_battsig[0] |= (15 << (8 - level))
+        if level > 0:
+            self._buffer_battsig[0] |= 128
+        if level > 1:
+            self._buffer_battsig[0] |= 64
+        if level > 2:
+            self._buffer_battsig[0] |= 32
+        if level > 3:
+            self._buffer_battsig[0] |= 16
+
+
         self.write(self._buffer_battsig, self.ADDR_SIGNAL_BATT)
 
 

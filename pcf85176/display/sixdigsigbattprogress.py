@@ -22,8 +22,27 @@ class SixDigitSigBattProgress(Display):
         super().__init__(bus, address, subaddress)
         self._mode(MODE_STATUS_ENABLED, MODE_BIAS_13, MODE_DRIVE_14)
         self._buffer = bytearray(16)
-    
+        self._buffer_battsig = bytearray(1)
+
+
     def progress(self, value):
         data = bytearray(3)
         data[0] = value
         self.write(data, self.ADDR_PROGRESS)
+
+
+    def batt(self, level):
+        self._buffer_battsig[0] &= ~(0x0f)
+        self._buffer_battsig[0] |= 15 << (4 - level)
+
+        self.write(self._buffer_battsig, self.ADDR_SIGNAL_BATT)
+
+
+    def signal(self, level):
+        self._buffer_battsig[0] &= ~(0xf0)
+        self._buffer_battsig[0] |= (15 << (8 - level))
+        self.write(self._buffer_battsig, self.ADDR_SIGNAL_BATT)
+
+
+    def wheel(self, data):
+        self.write(data, self.ADDR_WHEEL)

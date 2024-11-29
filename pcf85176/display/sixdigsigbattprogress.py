@@ -58,6 +58,9 @@ class SixDigitSigBattProgress(Display):
 
 
     def batt(self, level):
+        if value > 4:
+            raise ValueError("Out of range")
+
         self._buffer_battsig[0] &= ~(0x0f)
         if level > 0:
             self._buffer_battsig[0] |= 8
@@ -72,6 +75,9 @@ class SixDigitSigBattProgress(Display):
 
 
     def signal(self, level):
+        if value > 4:
+            raise ValueError("Out of range")
+
         self._buffer_battsig[0] &= ~(0xf0)
         if level > 0:
             self._buffer_battsig[0] |= 128

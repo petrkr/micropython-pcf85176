@@ -18,11 +18,38 @@ class SixDigitSigBattProgress(Display):
     ADDR_PROGRESS = 16
     ADDR_BIG_SEGS = 20
 
+    CHARSET = {
+        # ABCH FGED
+        "0" : 0xEB,
+        "1" : 0x60,
+        "2" : 0xC7,
+        "3" : 0xE5,
+        "4" : 0x6C,
+        "5" : 0xAD,
+        "6" : 0xAF,
+        "7" : 0xE0,
+        "8" : 0xEF,
+        "9" : 0xED,
+        "e" : 0x8F,
+        "f" : 0x8E,
+        "d" : 0x77,
+        "h" : 0x76
+        }
+
     def __init__(self, bus, address=56, subaddress=0):
         super().__init__(bus, address, subaddress)
         self._mode(MODE_STATUS_ENABLED, MODE_BIAS_13, MODE_DRIVE_14)
         self._buffer = bytearray(16)
         self._buffer_battsig = bytearray(1)
+        self._buffer_smalldig = bytearray(4)
+        self._buffer_bigdig = bytearray(6)
+
+
+    def _get_char_bits(self, char):
+        if char not in self.CHARSET:
+            return 0
+
+        return self.CHARSET[char]
 
 
     def progress(self, value):
@@ -46,3 +73,19 @@ class SixDigitSigBattProgress(Display):
 
     def wheel(self, data):
         self.write(data, self.ADDR_WHEEL)
+
+
+    def digit_small(self, digit, char, dot=False):
+        self._buffer_smalldig[digit-1] = 0x00
+        self._buffer_smalldig[digit-1] |= self._get_char_bits(char)
+        self._buffer_smalldig[digit-1] |= 0x10 if dot else 0x00
+
+        self.write(self._buffer_smalldig, self.ADDR_SMALL_SEGS)
+
+
+    def digit_big(self, digit, char, dot=False):
+        self._buffer_bigdig[6-digit] = 0x00
+        self._buffer_bigdig[6-digit] |= self._get_char_bits(char)
+        self._buffer_bigdig[6-digit] |= 0x10 if dot else 0x00
+
+        self.write(self._buffer_bigdig, self.ADDR_BIG_SEGS)

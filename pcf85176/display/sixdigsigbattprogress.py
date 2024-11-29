@@ -93,7 +93,14 @@ class SixDigitSigBattProgress(Display):
 
 
     def wheel(self, data):
-        self.write(data, self.ADDR_WHEEL)
+        if data > 4095:
+            raise ValueError("Out of range")
+
+        buffer = bytearray(2)
+        buffer[0] = data & 0xFF
+        buffer[1] = (((data >> 8) & 0x0F) << 4) | (((data >> 8) & 0xF0) >> 4)
+
+        self.write(buffer, self.ADDR_WHEEL)
 
 
     def digit_small(self, digit, char, dot=False):

@@ -39,7 +39,6 @@ class SixDigitSigBattProgress(Display):
     def __init__(self, bus, address=56, subaddress=0):
         super().__init__(bus, address, subaddress)
         self._mode(MODE_STATUS_ENABLED, MODE_BIAS_13, MODE_DRIVE_14)
-        self._buffer = bytearray(16)
         self._buffer_battsig = bytearray(1)
         self._buffer_smalldig = bytearray(4)
         self._buffer_bigdig = bytearray(6)

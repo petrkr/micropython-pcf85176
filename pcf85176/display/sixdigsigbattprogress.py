@@ -136,7 +136,7 @@ class SixDigitSigBattProgress(Display):
 
         buffer = bytearray(2)
         buffer[0] = data & 0xFF
-        buffer[1] = (((data >> 8) & 0x0F) << 4) | (((data >> 8) & 0xF0) >> 4)
+        buffer[1] = (((data >> 8) & 0x0F) << 4)
 
         self.write(buffer, self.ADDR_WHEEL)
 

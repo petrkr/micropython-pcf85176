@@ -18,6 +18,16 @@ class SixDigitSigBattProgress(Display):
     ADDR_PROGRESS = 16
     ADDR_BIG_SEGS = 20
 
+    LABEL_MPA = 0x01
+    LABEL_KPA = 0x02
+    LABEL_BAR = 0x04
+    LABEL_PSI = 0x08
+    LABEL_MH2O = 0x10
+    LABEL_MMHG = 0x20
+    LABEL_ATM = 0x40
+    LABEL_KGFCM2 = 0x80
+    LABEL_ALL = 0xFF
+
     CHARSET = {
         # ABCH FGED
         "0" : 0xEB,
@@ -42,6 +52,7 @@ class SixDigitSigBattProgress(Display):
         super().__init__(bus, address, subaddress)
         self._mode(MODE_STATUS_ENABLED, MODE_BIAS_13, MODE_DRIVE_14)
         self._buffer_battsig = bytearray(1)
+        self._buffer_labels = bytearray(1)
         self._buffer_smalldig = bytearray(4)
         self._buffer_bigdig = bytearray(6)
 
@@ -130,6 +141,18 @@ class SixDigitSigBattProgress(Display):
 
 
         self.write(self._buffer_battsig, self.ADDR_SIGNAL_BATT)
+
+
+    def set_labels(self, labels):
+        self._buffer_labels[0] |= labels
+
+        self.write(self._buffer_labels, self.ADDR_PRES_LABELS)
+
+
+    def clear_labels(self, labels=LABEL_ALL):
+        self._buffer_labels[0] &= ~labels
+
+        self.write(self._buffer_labels, self.ADDR_PRES_LABELS)
 
 
     def wheel(self, data):

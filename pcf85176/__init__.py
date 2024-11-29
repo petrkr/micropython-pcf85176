@@ -88,7 +88,7 @@ class PCF85176():
         if address > self.MAX_ADDRESS:
             raise ValueError("Invalid address")
 
-        if address + len(lcddata) > self.MAX_ADDRESS:
+        if address + (len(lcddata) // 2) > self.MAX_ADDRESS:
             raise ValueError("Data overflow address")
 
         data = bytearray(1)

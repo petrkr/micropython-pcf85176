@@ -30,6 +30,7 @@ class SixDigitSigBattProgress(Display):
 
     CHARSET = {
         # ABCH FGED
+        " " : 0x00,
         "0" : 0xEB,
         "1" : 0x60,
         "2" : 0xC7,

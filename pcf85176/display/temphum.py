@@ -96,8 +96,8 @@ class TempHumiditySigBatt(Display):
 
 
     def digit_big(self, digit, char, dot=False):
-        self._buffer_bigdig[6-digit] = 0x00
-        self._buffer_bigdig[6-digit] |= self._get_char_bits(char)
-        self._buffer_bigdig[6-digit] |= 0x08 if dot else 0x00
+        self._buffer_bigdig[digit-1] = 0x00
+        self._buffer_bigdig[digit-1] |= self._get_char_bits(char)
+        self._buffer_bigdig[digit-1] |= 0x08 if dot else 0x00
 
         self.write(self._buffer_bigdig, self.ADDR_BIG_SEGS)

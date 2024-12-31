@@ -46,6 +46,7 @@ class SixDigitSigBattProgress(Display):
         "f" : 0x8E,
         "d" : 0x77,
         "h" : 0x76,
+        "p" : 0xCE,
         "*" : 0xCC
         }
 

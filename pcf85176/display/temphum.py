@@ -34,6 +34,7 @@ class TempHumiditySigBatt(Display):
         "f" : 0x71,
         "d" : 0xE6,
         "h" : 0x66,
+        "p" : 0x73,
         "*" : 0x33
         }
 

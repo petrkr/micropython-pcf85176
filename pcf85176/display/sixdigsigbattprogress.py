@@ -74,11 +74,11 @@ class SixDigitSigBattProgress(Display):
         if level > 0:
             self._buffer_battsig[0] |= 8
         if level > 1:
-            self._buffer_battsig[0] |= 4
+            self._buffer_battsig[0] |= 1
         if level > 2:
             self._buffer_battsig[0] |= 2
         if level > 3:
-            self._buffer_battsig[0] |= 1
+            self._buffer_battsig[0] |= 4
 
         self.write(self._buffer_battsig, self.ADDR_SIGNAL_BATT)
 

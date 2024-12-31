@@ -87,7 +87,7 @@ class SixDigitSigBattProgress(Display):
         if value > 150:
             raise ValueError("Out of range")
 
-        buffer = bytearray(4)
+        buffer = bytearray(2)
 
         if value > 0:
             buffer[0] |= 0x80

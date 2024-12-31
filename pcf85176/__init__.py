@@ -39,18 +39,18 @@ class PCF85176():
         self._subaddr = subaddress
 
 
-    def _device_select(self, lastcommand=False):
+    def _device_select(self):
         data = bytearray(1)
-        data[0] |= 0x00 if lastcommand else 0x80
+        data[0] |= 0x80
         data[0] |= self.CMD_DEVICE_SELECT
         data[0] |= self._subaddr
 
         self._bus.writeto(self._addr, data)
 
 
-    def _mode(self, status=MODE_STATUS_ENABLED, bias=MODE_BIAS_13, drive=MODE_DRIVE_14, lastcommand=False):
+    def _mode(self, status=MODE_STATUS_ENABLED, bias=MODE_BIAS_13, drive=MODE_DRIVE_14):
         data = bytearray(1)
-        data[0] |= 0x00 if lastcommand else 0x80
+        data[0] |= 0x80
         data[0] |= self.CMD_MODE
         data[0] |= status << 3
         data[0] |= bias << 2
@@ -61,9 +61,9 @@ class PCF85176():
         self._bus.writeto(self._addr, data)
 
 
-    def bank_select(self, input_bank=0, output_bank=0, lastcommand=False):
+    def bank_select(self, input_bank=0, output_bank=0):
         data = bytearray(1)
-        data[0] |= 0x00 if lastcommand else 0x80
+        data[0] |= 0x80
         data[0] |= self.CMD_BANK_SELECT
         data[0] |= self.input_bank << 1
         data[0] |= self.output_bank
@@ -71,9 +71,9 @@ class PCF85176():
         self._bus.writeto(self._addr, data)
 
 
-    def blink(self, freq=BLINK_FREQUENCY_OFF, mode=BLINK_MODE_NORMAL, lastcommand=False):
+    def blink(self, freq=BLINK_FREQUENCY_OFF, mode=BLINK_MODE_NORMAL):
         data = bytearray(1)
-        data[0] |= 0x00 if lastcommand else 0x80
+        data[0] |= 0x80
         data[0] |= self.CMD_BLINK
         data[0] |= mode << 2
         data[0] |= freq
@@ -88,7 +88,7 @@ class PCF85176():
         if address > self.MAX_ADDRESS:
             raise ValueError("Invalid address")
 
-        if address + (len(lcddata) // 2) > self.MAX_ADDRESS:
+        if address + len(lcddata) > self.MAX_ADDRESS:
             raise ValueError("Data overflow address")
 
         data = bytearray(1)
